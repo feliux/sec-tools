@@ -1,0 +1,9 @@
+# General
+*secrets*
+
+# Folders
+*.env
+
+# Files
+*.pem
+*.zip

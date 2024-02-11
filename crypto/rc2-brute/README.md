@@ -1,0 +1,3 @@
+## RC2 brute forcing
+
+The program starts the producers and consumers and then waits for them to execute. When a card is found, the program displays the cleartext card and the key used to decrypt that card. Since we assume this key is the magical key for all cards, we interrupt execution prematurely and celebrate our success by painting a self-portrait (not shown). Of course, depending on the key value, brute-forcing on a home computer can take a significant amount of time (think days or even weeks). For the preceding sample run, we narrowed the key space to find the key more quickly. However, completely exhausting the key space on a 2016 MacBook Pro takes approximately seven days. Not too bad for a quick-and-dirty solution running on a laptop.
