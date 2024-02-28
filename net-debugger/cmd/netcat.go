@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"github.com/feliux/sec-tools/net-debbuger/netcat"
+	"github.com/feliux/sec-tools/net-debugger/netcat"
 	"github.com/spf13/cobra"
 )
 
 // netcatCmd represents the netcat command
 var netcatCmd = &cobra.Command{
-	Use:   "netcat",
+	Use:   "nc",
 	Short: "Minimal netcat tool",
 	Long: `
 Connect to somewhere:  nc -a [hostname] -p [port]
@@ -37,8 +37,8 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	netcatCmd.Flags().BoolP("listen", "l", false, "listen mode, for inbound connects.")
-	netcatCmd.Flags().StringP("address", "a", "localhost", "hostname to connect (client).")
-	netcatCmd.Flags().IntP("port", "p", 5000, "port to connect (client) or bind (server).")
+	netcatCmd.Flags().BoolP("listen", "l", false, "listen mode, for inbound connects")
+	netcatCmd.Flags().StringP("address", "a", "localhost", "hostname to connect (client)")
+	netcatCmd.Flags().IntP("port", "p", 5000, "port to connect (client) or bind (server)")
 	netcatCmd.Flags().BoolP("zero", "z", false, " zero-I/O mode (used for scanning)")
 }

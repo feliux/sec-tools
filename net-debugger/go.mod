@@ -1,4 +1,4 @@
-module github.com/feliux/sec-tools/net-debbuger
+module github.com/feliux/sec-tools/net-debugger
 
 go 1.21.6
 

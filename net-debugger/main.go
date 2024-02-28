@@ -1,6 +1,6 @@
 package main
 
-import "github.com/feliux/sec-tools/net-debbuger/cmd"
+import "github.com/feliux/sec-tools/net-debugger/cmd"
 
 func main() {
 	cmd.Execute()
