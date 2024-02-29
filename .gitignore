@@ -3,6 +3,7 @@
 
 # Folders
 *.env
+*/bin/*
 
 # Files
 *.pem
