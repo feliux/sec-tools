@@ -1,11 +1,14 @@
 # -*- encoding: utf-8 -*-
 
 import logging
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
+
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+
 if len(sys.argv) != 3:
-    print "usage: python udp_scan.py <ip address> <list of ports separated by colon>"
+    print("usage: python udp_scan.py <ip address> <list of ports separated by colon>")
     exit()
+
 src_port = RandShort()
 dst_ip = sys.argv[1]
 ports = sys.argv[2]
@@ -20,9 +23,9 @@ for port in scanPorts:
             retrans.append(sr1(IP(dst=dst_ip)/UDP(dport=int(port)), timeout=5))
             for item in retrans:
                 if (response.haslayer(UDP)):
-                    print port+": Open"
+                    print(port+": Open")
                 elif(response.haslayer(ICMP)):
                     if(int(response.getlayer(ICMP).type)==3 and int(response.getlayer(ICMP).code)==3):
-                        print port+": Closed"
+                        print(port+": Closed")
                     elif(int(response.getlayer(ICMP).type)==3 and int(response.getlayer(ICMP).code) in [1,2,9,10,13]):
-                        print port+": Filtered"
+                        print(port+": Filtered")

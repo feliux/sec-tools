@@ -1,11 +1,12 @@
 # -*- encoding: utf-8 -*-
 
 import logging
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+
 if len(sys.argv) != 3:
-    print "usage: python fin_scan.py <ip address> <list of ports separated by colon>"
+    print("usage: python fin_scan.py <ip address> <list of ports separated by colon>")
     exit()
 
 src_port = RandShort()
@@ -16,10 +17,10 @@ scanPorts = ports.strip().split(':')
 for port in scanPorts:
     response = sr1(IP(dst=dst_ip)/TCP(dport=int(port),flags="F"), timeout=5)
     if (str(type(response))=="<type 'NoneType'>"):
-        print "Open"
+        print("Open")
     elif(response.haslayer(TCP)):
         if(response.getlayer(TCP).flags == 0x14):
-            print "Closed"
+            print("Closed")
     elif(response.haslayer(ICMP)):
         if(int(response.getlayer(ICMP).type)==3 and int(response.getlayer(ICMP).code) in [1,2,3,9,10,13]):
-            print "Filtered"
+            print("Filtered")
