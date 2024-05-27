@@ -22,7 +22,6 @@ func main() {
 		"\"",
 		"'",
 	}
-
 	sqlErrors := []string{
 		"SQL",
 		"MySQL",
@@ -59,7 +58,7 @@ func main() {
 		resp.Body.Close()
 
 		for idx, re := range errRegexes {
-			// testing the response body for the presence of your SQL error keywords
+			// Testing the response body for the presence of your SQL error keywords
 			// If you get a match, you probably have a SQL injection error message
 			if re.MatchString(string(body)) {
 				fmt.Printf(
