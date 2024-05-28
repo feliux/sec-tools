@@ -5,7 +5,6 @@ import tqdm
 import sys
 from operator import attrgetter
 
-# Subdomain brute force based on Python 3.5
 host_getter = attrgetter("host")
 
 async def get_ip(sem, resolver, dname, wildcard=None):
@@ -47,9 +46,12 @@ def run(name, filename):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Subdomain Scan", usage="python3 %(prog)s [options]", prog="scan_subdomain.py")
-    parser.add_argument("--version", action="version", version="%(prog)s 2.1")
-    parser.add_argument("domain", help="domain name e.g. qq.com")
-    parser.add_argument("-f", "--file", help="dict file in ./dict", default="subnames.txt")
+        description="Subdomain brute force enumeration based on Python 3.5",
+        usage="python3 %(prog)s [options]",
+        prog="scan_subdomain.py"
+    )
+    parser.add_argument("--version", action="version", version="%(prog)s 1.0")
+    parser.add_argument("domain", help="domain name e.g. foobar.com")
+    parser.add_argument("-f", "--file", help="dict file in ./dict", default="dictionary.txt")
     args = parser.parse_args()
     run(args.domain, args.file)

@@ -1,6 +1,5 @@
 import nmap
 
-
 class NmapHost:
     def __init__(self):
         self.host = None
@@ -48,7 +47,7 @@ def parseNmapScan(scan):
                             nmapHost.closedFilteredPorts.append(nmapPort)
                     nmapHosts.append(nmapHost)
         else:
-            print("[-] There"s no match in the Nmap scan with the specified protocol ", protocol)
+            print("[-] There is no match in the Nmap scan with the specified protocol ", protocol)
     return nmapHosts
  
 if __name__ == "__main__":
@@ -57,7 +56,7 @@ if __name__ == "__main__":
     nm.scan("127.0.0.1", "22-8080", arguments="-sV -n -A -T5")
     structureNmap = parseNmapScan(nm)
     for host in structureNmap:
-        print "Host: "+ host.host
-        print "State: "+ host.state
+        print("Host: "+ host.host)
+        print("State: "+ host.state)
         for openPort in host.openPorts:
-            print str(openPort.port)+" - "+openPort.state
+            print(str(openPort.port)+" - "+openPort.state)
