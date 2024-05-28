@@ -20,14 +20,14 @@ func main() {
 	flag.Parse()
 	ln, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Can't listen on port %q: %s\n", port, err)
+		fmt.Fprintf(os.Stderr, "can not listen on port %q: %s\n", port, err)
 		os.Exit(1)
 	}
 	err = ln.Close()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Couldn't stop listening on port %q: %s\n", port, err)
+		fmt.Fprintf(os.Stderr, "could not stop listening on port %q: %s\n", port, err)
 		os.Exit(1)
 	}
-	fmt.Printf("TCP Port %q is available\n", port)
+	fmt.Printf("tcp port %q is available\n", port)
 	os.Exit(0)
 }

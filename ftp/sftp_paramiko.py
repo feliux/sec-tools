@@ -27,7 +27,7 @@ try:
 		sftp.mkdir("demo")		
 		print("Directory recreated.")
 	client.close()
-except Exception, e:
+except Exception as e:
 	print("Exception: ", str(e))
 	try:
 		client.close()

