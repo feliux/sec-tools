@@ -1,4 +1,4 @@
-# DLL shelccode from GO
+# DLL shellcode from GO
 
 Generate two files, an archive file called `dllshellcode.a` and an associated header file called `dllshellcode.h`.
 

